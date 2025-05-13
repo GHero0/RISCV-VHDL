@@ -44,7 +44,6 @@ fpga/build/
 
 soft/tools/riscv
 
-firmware/
 
 simu/work-obj08.cf
 .vscode/settings.json
