@@ -1,0 +1,49 @@
+name: Run GHDL Tests for Project
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install GHDL and dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y g++
+        sudo apt install -y ghdl gtkwave make
+        sudo apt install -y gcc-12-riscv64-linux-gnu
+
+    - name : RUN preparatory make-1
+      working-directory: soft/tools/firmware_words
+      run: |
+        make 
+
+    - name : RUN preparatory make-2
+      working-directory: soft/libuc
+      run: |
+        make 
+        
+    - name: Prepare environment
+      working-directory: soft/apps/1-hello_putc
+      run: |
+        make
+    
+    - name: Run Makefile for simulation tests
+      working-directory: simu
+      continue-on-error: true
+      run: |
+        make riscv > output.log 2>&1
+
+    - name: Upload simulation output
+      uses: actions/upload-artifact@v4
+      with:
+        name: simulation-output
+        path: simu/output.log
