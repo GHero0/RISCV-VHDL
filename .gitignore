@@ -43,7 +43,6 @@ fpga/riscv_enssat_teacher
 fpga/build/
 
 soft/tools/riscv
-soft/tools/firmware_words/firmware_words
 
 firmware/
 
